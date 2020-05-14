@@ -76,6 +76,7 @@ class Album extends Component {
                         )}
                     </tbody>
                 </table>
+                <span className="ion-play"></span>
             </section>
         );
     }
