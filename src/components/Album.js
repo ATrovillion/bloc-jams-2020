@@ -13,7 +13,7 @@ class Album extends Component {
             album: album,
             currentSong: album.songs[0],
             isPlaying: false,
-            isHovered: false
+            isHovered: []
         };
 
         this.audioElement = document.createElement('audio');
@@ -39,15 +39,28 @@ class Album extends Component {
         const isSameSong = this.state.currentSong === song;
         if (this.state.isPlaying && isSameSong) {
             this.pause();
+        } else if (song === null) {
+            this.setState({ isHovered: [] })
+        
         } else {
             if (!isSameSong) { this.setSong(song) }
             this.play();
         }
     }
 
-    toggleHover(song) {
+    handleHover(song) {
+        if (this.state.isHovered !== song) {
+            this.setState({ isHovered: song })
+        } else {
+            return
+        }
         
     }
+
+    handleUnhover(song) {
+        this.setState({ isHovered: [] })
+    }
+
     render() {
         return (
             <section className="album">
@@ -71,20 +84,26 @@ class Album extends Component {
                                <th>Title</th>
                                <th>Duration</th>
                         </tr>
-                        {this.state.album.songs.map( (song, index) =>
-                            <tr className="song" key={index}
+                        {this.state.album.songs.map( (song, index) => {
+                            if (song === this.state.isHovered) {
+                                if (this.state.isPlaying && song === this.state.currentSong) {
+                                   return <button className="ion-pause" onClick={() => this.handleSongClick(song)}></button>
+                                } else {
+                                   return <button className="ion-play" onClick={() => this.handleSongClick(song)}></button>
+                                }
+                            } else {
+                                return <tr className="song" key={index}
                                 onClick={() => this.handleSongClick(song)}
-                                onMouseEnter={() => this.toggleHover(song)} 
+                                onMouseEnter={() => this.handleHover(song)} 
                             >
                                 <td>{index + 1}</td>
                                 <td>{song.title}</td>
                                 <td>{song.duration}</td>
                             </tr>
-                        )}
+                            }
+                            })}
                     </tbody>
                 </table>
-                <span className="ion-play"></span>
-                <span className="ion-pause"></span>
             </section>
         );
     }
