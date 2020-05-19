@@ -114,6 +114,15 @@ class Album extends Component {
         }  
     }
 
+    formatTime(timeInSeconds) {
+        if (isNaN(timeInSeconds) || timeInSeconds === 0) {
+            return "-:--"
+        }
+        var minutes = Math.floor(timeInSeconds / 60);
+        var seconds = Math.floor(timeInSeconds - (minutes * 60));
+        return `${minutes}:${seconds}`
+    }
+
     render() {
         return (
             <section className="album">
@@ -169,6 +178,7 @@ class Album extends Component {
                     handleNextClick={() => this.handleNextClick()}
                     handleTimeChange={(e) => this.handleTimeChange(e)}
                     handleVolumeChange={(e) => this.handleVolumeChange(e)}
+                    formatTime={(timeInSeconds) => this.formatTime(timeInSeconds)}
                     />
             </section>
         );
